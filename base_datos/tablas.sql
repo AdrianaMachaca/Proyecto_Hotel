@@ -12,6 +12,7 @@ CREATE TABLE Habitacion (
 CREATE TABLE Cliente(
 idCliente INTEGER PRIMARY KEY AUTOINCREMENT,
 Nombre TEXT NOT NULL,
+Apellido TEXT NOT NULL,
 Telefono TEXT,
 Correo TEXT
 );
@@ -22,7 +23,8 @@ CREATE TABLE Reserva (
     fechaEntrada TEXT NOT NULL,
     fechaSalida TEXT NOT NULL,
     estadoReserva TEXT NOT NULL,
-    serviciosExtras TEXT
+    serviciosExtras TEXT,
+    costo FLOAT NOT NULL
 );
 DELETE FROM sqlite_sequence;
 COMMIT;
