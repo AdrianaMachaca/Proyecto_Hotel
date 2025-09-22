@@ -40,6 +40,17 @@ class Reserva_manager:
         self.cursor.execute("SELECT * FROM Reserva")
         filas = self.cursor.fetchall()
         return [Reserva(*fila) for fila in filas]
+    
+    def consultar_reservas(self, idReserva):
+        self.cursor.execute("""
+            SELECT * FROM Reserva
+            WHERE idReserva = ?
+        """,(idReserva,))
+        disponible = self.cursor.fetchone()
+        if disponible:
+            print("Habitacion no esta disponible")
+        else:
+            print("Habitacion esta disponible")
 
     def eliminar_reserva(self, idReserva):
         self.cursor.execute("""

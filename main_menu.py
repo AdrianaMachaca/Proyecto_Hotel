@@ -1,5 +1,14 @@
-"""def menu():
+import sqlite3
+from modelos.base import conectar_db
+from managers.cliente_manager import Ciente_manager
+from managers.habitacion_manager import Habitacion_manager
+from managers.reserva_manager import Reserva_manager
 
+def menu():
+    conn = conectar_db() 
+    cliente_mgr = Ciente_manager(conn)
+    habitacion_mgr = Habitacion_manager(conn)
+    reserva_mgr = Reserva_manager(conn)
 
     while True:
         print("\n=== MENÚ PRINCIPAL ===")
@@ -22,7 +31,7 @@
                 apellido = input("Apellido: ")
                 telefono = input("Teléfono: ")
                 correo = input("Correo: ")
-                idCliente = sistema.registrar_cliente(nombre, apellido, telefono, correo)
+                idCliente = cliente_mgr.registrar_cliente(nombre, apellido, telefono, correo)
 
                 crear = input("¿Desea crear una reserva para este cliente ahora? (s/n): ")
                 if crear.lower() == "s":
@@ -32,7 +41,7 @@
                     estado = input("Estado (Confirmada/Pendiente/Cancelada): ")
                     servicios = input("Servicios extras: ")
                     cuenta = float(input("Costo total: "))
-                    sistema.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
+                    reserva_mgr.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
 
             case 2:
                 idCliente = int(input("ID del cliente: "))
@@ -42,19 +51,19 @@
                 estado = input("Estado (Confirmada/Pendiente/Cancelada): ")
                 servicios = input("Servicios extras: ")
                 cuenta = float(input("Costo total: "))
-                sistema.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
+                reserva_mgr.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
 
             case 3:
                 idReserva = int(input("ID de la reserva a consultar: "))
-                sistema.consultar_reservas(idReserva)
+                reserva_mgr.consultar_reservas(idReserva)
 
             case 4:
                 idReserva = int(input("ID de la reserva a eliminar: "))
-                sistema.eliminar_reserva(idReserva)
+                reserva_mgr.eliminar_reserva(idReserva)
 
             case 5:
                 numHabit = int(input("Número de habitación a consultar: "))
-                sistema.Disponibilidad_habitaciones(numHabit)
+                habitacion_mgr.Disponibilidad_habitaciones(numHabit)
             case 6:
                 print("Saliendo del sistema.")
                 break
@@ -65,4 +74,3 @@
 
 if __name__ == "__main__":
     menu()
-"""
