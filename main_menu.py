@@ -1,149 +1,76 @@
-from textual.app import App, ComposeResult
-from textual.containers import Horizontal, Vertical, Container
-from textual.widgets import Header, Footer, Button, Static, Input
+import sqlite3
+from modelos.base import conectar_db
 from managers.cliente_manager import Ciente_manager
 from managers.habitacion_manager import Habitacion_manager
 from managers.reserva_manager import Reserva_manager
-from modelos.base import conectar_db
-from textual.screen import Screen
 
-# ------------------ Pantalla Registrar Cliente ------------------
-class PantallaCliente(Screen):
-    def __init__(self, cliente_mgr):
-        super().__init__()
-        self.cliente_mgr = cliente_mgr
+def menu():
+    conn = conectar_db() 
+    cliente_mgr = Ciente_manager(conn)
+    habitacion_mgr = Habitacion_manager(conn)
+    reserva_mgr = Reserva_manager(conn)
 
-    def compose(self) -> ComposeResult:
-        yield Static("Registrar Cliente", id="titulo_cliente")
-        yield Input(placeholder="Nombre", id="nombre")
-        yield Input(placeholder="Apellido", id="apellido")
-        yield Input(placeholder="Teléfono", id="telefono")
-        yield Input(placeholder="Correo", id="correo")
-        yield Button("Registrar", id="btn_registrar")
-        yield Button("Volver", id="btn_volver_cliente")
+    while True:
+        print("\n=== MENÚ PRINCIPAL ===")
+        print("1. Registrar cliente")
+        print("2. Crear reserva")
+        print("3. Consultar reservas")
+        print("4. Eliminar reserva")
+        print("5. Mostrar disponibilidad")
+        print("6. Salir")
 
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_volver_cliente":
-            self.app.pop_screen()
-        elif event.button.id == "btn_registrar":
-            nombre = self.query_one("#nombre", Input).value
-            apellido = self.query_one("#apellido", Input).value
-            telefono = self.query_one("#telefono", Input).value
-            correo = self.query_one("#correo", Input).value
-            self.cliente_mgr.registrar_cliente(nombre, apellido, telefono, correo)
-            self.app.pop_screen()
+        try:
+            opcion = int(input("Seleccione una opción: "))
+        except ValueError:
+            print("Entrada inválida. Debe ser un número.")
+            continue
 
-# ------------------ Pantalla Crear Reserva ------------------
-class PantallaReserva(Screen):
-    def __init__(self, reserva_mgr, cliente_mgr, habitacion_mgr):
-        super().__init__()
-        self.reserva_mgr = reserva_mgr
-        self.cliente_mgr = cliente_mgr
-        self.habitacion_mgr = habitacion_mgr
+        match opcion:
+            case 1:
+                nombre = input("Nombre: ")
+                apellido = input("Apellido: ")
+                telefono = input("Teléfono: ")
+                correo = input("Correo: ")
+                idCliente = cliente_mgr.registrar_cliente(nombre, apellido, telefono, correo)
 
-    def compose(self) -> ComposeResult:
-        yield Static("Crear Reserva", id="titulo_reserva")
-        yield Input(placeholder="ID Cliente", id="id_cliente")
-        yield Input(placeholder="Número Habitación", id="num_habit")
-        yield Input(placeholder="Fecha Entrada (YYYY-MM-DD)", id="fecha_entrada")
-        yield Input(placeholder="Fecha Salida (YYYY-MM-DD)", id="fecha_salida")
-        yield Input(placeholder="Estado (Confirmada/Pendiente/Cancelada)", id="estado")
-        yield Input(placeholder="Servicios extras", id="servicios")
-        yield Input(placeholder="Costo total", id="cuenta")
-        yield Button("Crear Reserva", id="btn_crear_reserva")
-        yield Button("Volver", id="btn_volver_reserva")
+                crear = input("¿Desea crear una reserva para este cliente ahora? (s/n): ")
+                if crear.lower() == "s":
+                    numHabit = int(input("Número de habitación: "))
+                    fechaEntrada = input("Fecha de entrada (YYYY-MM-DD): ")
+                    fechaSalida = input("Fecha de salida (YYYY-MM-DD): ")
+                    estado = input("Estado (Confirmada/Pendiente/Cancelada): ")
+                    servicios = input("Servicios extras: ")
+                    cuenta = float(input("Costo total: "))
+                    reserva_mgr.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
 
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_volver_reserva":
-            self.app.pop_screen()
-        elif event.button.id == "btn_crear_reserva":
-            id_cliente = int(self.query_one("#id_cliente", Input).value)
-            num_habit = int(self.query_one("#num_habit", Input).value)
-            fecha_entrada = self.query_one("#fecha_entrada", Input).value
-            fecha_salida = self.query_one("#fecha_salida", Input).value
-            estado = self.query_one("#estado", Input).value
-            servicios = self.query_one("#servicios", Input).value
-            cuenta = float(self.query_one("#cuenta", Input).value)
-            self.reserva_mgr.crear_reserva(num_habit, id_cliente, fecha_entrada, fecha_salida, estado, servicios, cuenta)
-            self.app.pop_screen()
+            case 2:
+                idCliente = int(input("ID del cliente: "))
+                numHabit = int(input("Número de habitación: "))
+                fechaEntrada = input("Fecha de entrada (YYYY-MM-DD): ")
+                fechaSalida = input("Fecha de salida (YYYY-MM-DD): ")
+                estado = input("Estado (Confirmada/Pendiente/Cancelada): ")
+                servicios = input("Servicios extras: ")
+                cuenta = float(input("Costo total: "))
+                reserva_mgr.crear_reserva(numHabit, idCliente, fechaEntrada, fechaSalida, estado, servicios, cuenta)
 
-# ------------------ Pantalla Consultar Reservas ------------------
-class PantallaConsultar(Screen):
-    def __init__(self, reserva_mgr):
-        super().__init__()
-        self.reserva_mgr = reserva_mgr
+            case 3:
+                idReserva = int(input("ID de la reserva a consultar: "))
+                reserva_mgr.consultar_reservas(idReserva)
 
-    def compose(self) -> ComposeResult:
-        yield Input(placeholder="ID Reserva", id="id_reserva")
-        yield Button("Consultar", id="btn_consultar")
-        yield Button("Volver", id="btn_volver_consultar")
-        yield Static("", id="resultado_consulta")
+            case 4:
+                idReserva = int(input("ID de la reserva a eliminar: "))
+                reserva_mgr.eliminar_reserva(idReserva)
 
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_volver_consultar":
-            self.app.pop_screen()
-        elif event.button.id == "btn_consultar":
-            id_reserva = int(self.query_one("#id_reserva", Input).value)
-            resultado = self.reserva_mgr.consultar_reservas(id_reserva)
-            self.query_one("#resultado_consulta", Static).update(str(resultado))
+            case 5:
+                numHabit = int(input("Número de habitación a consultar: "))
+                habitacion_mgr.Disponibilidad_habitaciones(numHabit)
+            case 6:
+                print("Saliendo del sistema.")
+                break
 
-# ------------------ Pantalla Mostrar Disponibilidad ------------------
-class PantallaDisponibilidad(Screen):
-    def __init__(self, habitacion_mgr):
-        super().__init__()
-        self.habitacion_mgr = habitacion_mgr
-
-    def compose(self) -> ComposeResult:
-        yield Input(placeholder="Número de habitación", id="num_habit")
-        yield Button("Consultar", id="btn_consultar_disp")
-        yield Button("Volver", id="btn_volver_disp")
-        yield Static("", id="resultado_disp")
-
-    def on_button_pressed(self, event):
-        if event.button.id == "btn_volver_disp":
-            self.app.pop_screen()
-        elif event.button.id == "btn_consultar_disp":
-            num_habit = int(self.query_one("#num_habit", Input).value)
-            resultado = self.habitacion_mgr.Disponibilidad_habitaciones(num_habit)
-            self.query_one("#resultado_disp", Static).update(str(resultado))
-
-# ------------------ Pantalla Principal ------------------
-class HotelDashboard(App):
-    CSS_PATH = None
-
-    def __init__(self):
-        super().__init__()
-        self.conn = conectar_db()
-        self.cliente_mgr = Ciente_manager(self.conn)
-        self.habitacion_mgr = Habitacion_manager(self.conn)
-        self.reserva_mgr = Reserva_manager(self.conn)
-
-    def compose(self) -> ComposeResult:
-        yield Header(show_clock=True)
-        yield Container(
-            Vertical(
-                Button("Registrar cliente", id="menu_cliente"),
-                Button("Crear reserva", id="menu_reserva"),
-                Button("Consultar reservas", id="menu_consultar"),
-                Button("Mostrar disponibilidad", id="menu_disponibilidad"),
-                Button("Salir", id="menu_salir"),
-            ),
-            id="menu_principal"
-        )
-        yield Footer()
-
-    def on_button_pressed(self, event):
-        if event.button.id == "menu_cliente":
-            self.push_screen(PantallaCliente(self.cliente_mgr))
-        elif event.button.id == "menu_reserva":
-            self.push_screen(PantallaReserva(self.reserva_mgr, self.cliente_mgr, self.habitacion_mgr))
-        elif event.button.id == "menu_consultar":
-            self.push_screen(PantallaConsultar(self.reserva_mgr))
-        elif event.button.id == "menu_disponibilidad":
-            self.push_screen(PantallaDisponibilidad(self.habitacion_mgr))
-        elif event.button.id == "menu_salir":
-            self.exit()
+            case _:
+                print("Opción inválida.")
 
 
 if __name__ == "__main__":
-    HotelDashboard().run()
+    menu()
