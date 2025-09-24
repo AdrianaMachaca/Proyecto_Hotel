@@ -5,25 +5,27 @@ from rich.panel import Panel
 from rich.text import Text
 from pyfiglet import Figlet
 from textual.screen import Screen
+from fpdf import FPDF
+
 from modelos.base import conectar_db
 from managers.cliente_manager import Ciente_manager
 from managers.habitacion_manager import Habitacion_manager
 from managers.reserva_manager import Reserva_manager
 
-# ------------------ Pantalla de registro usuario/contrasena ------------------
+# ------------------ Pantalla Registro ------------------
 class PantallaRegistro(Screen):
     def compose(self) -> ComposeResult:
         yield Horizontal(
             Vertical(
-                Static(Panel("Usuario", title="Nombre de usuario")),
+                Static(Panel("Usuario", title="Nombre de usuario", style="bold white on dark_green")),
                 Input(placeholder="Ingresa tu usuario", id="usuario"),
             ),
             Vertical(
-                Static(Panel("Contraseña", title="Contraseña")),
+                Static(Panel("Contraseña", title="Contraseña", style="bold white on dark_red")),
                 Input(placeholder="Ingresa tu contraseña", password=True, id="contrasena"),
             ),
         )
-        yield Button("Registrarse", id="btn_registrarse")
+        yield Button("Registrarse", id="btn_registrarse", style="bold white on blue")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_registrarse":
@@ -31,48 +33,21 @@ class PantallaRegistro(Screen):
             contrasena = self.query_one("#contrasena", Input).value
             self.app.push_screen(MensajePantalla(f"Usuario {usuario} registrado correctamente"))
 
-# ------------------ Pantalla de mensaje ------------------
+# ------------------ Pantalla Mensaje ------------------
 class MensajePantalla(Screen):
     def __init__(self, mensaje: str):
         super().__init__()
         self.mensaje = mensaje
 
     def compose(self) -> ComposeResult:
-        yield Static(self.mensaje)
-        yield Button("Ir al menú principal", id="btn_menu")
+        yield Static(Panel(self.mensaje, style="bold white on dark_blue"))
+        yield Button("Ir al menú principal", id="btn_menu", style="bold white on green")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_menu":
             self.app.push_screen(MenuPrincipalScreen(self.app.cliente_mgr,
                                                      self.app.habitacion_mgr,
                                                      self.app.reserva_mgr))
-
-# ------------------ Pantalla del menú principal ------------------
-class MenuPrincipalScreen(Screen):
-    def __init__(self, cliente_mgr, habitacion_mgr, reserva_mgr):
-        super().__init__()
-        self.cliente_mgr = cliente_mgr
-        self.habitacion_mgr = habitacion_mgr
-        self.reserva_mgr = reserva_mgr
-
-    def compose(self) -> ComposeResult:
-        yield Button("Registrar cliente", id="menu_cliente")
-        yield Button("Crear reserva", id="menu_reserva")
-        yield Button("Consultar reservas", id="menu_consultar")
-        yield Button("Mostrar disponibilidad", id="menu_disponibilidad")
-        yield Button("Salir", id="menu_salir")
-
-    def on_button_pressed(self, event):
-        if event.button.id == "menu_cliente":
-            self.app.push_screen(PantallaCliente(self.cliente_mgr))
-        elif event.button.id == "menu_reserva":
-            self.app.push_screen(PantallaReserva(self.reserva_mgr, self.cliente_mgr, self.habitacion_mgr))
-        elif event.button.id == "menu_consultar":
-            self.app.push_screen(PantallaConsultar(self.reserva_mgr))
-        elif event.button.id == "menu_disponibilidad":
-            self.app.push_screen(PantallaDisponibilidad(self.habitacion_mgr))
-        elif event.button.id == "menu_salir":
-            self.app.exit()
 
 # ------------------ Pantalla Registrar Cliente ------------------
 class PantallaCliente(Screen):
@@ -81,13 +56,13 @@ class PantallaCliente(Screen):
         self.cliente_mgr = cliente_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static("Registrar Cliente", id="titulo_cliente")
+        yield Static(Panel("Registrar Cliente", style="bold white on dark_green"))
         yield Input(placeholder="Nombre", id="nombre")
         yield Input(placeholder="Apellido", id="apellido")
         yield Input(placeholder="Teléfono", id="telefono")
         yield Input(placeholder="Correo", id="correo")
-        yield Button("Registrar", id="btn_registrar")
-        yield Button("Volver", id="btn_volver_cliente")
+        yield Button("Registrar", id="btn_registrar", style="bold white on green")
+        yield Button("Volver", id="btn_volver_cliente", style="bold white on red")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_volver_cliente":
@@ -109,7 +84,7 @@ class PantallaReserva(Screen):
         self.habitacion_mgr = habitacion_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static("Crear Reserva", id="titulo_reserva")
+        yield Static(Panel("Crear Reserva", style="bold white on dark_cyan"))
         yield Input(placeholder="ID Cliente", id="id_cliente")
         yield Input(placeholder="Número Habitación", id="num_habit")
         yield Input(placeholder="Fecha Entrada (YYYY-MM-DD)", id="fecha_entrada")
@@ -117,8 +92,8 @@ class PantallaReserva(Screen):
         yield Input(placeholder="Estado (Confirmada/Pendiente/Cancelada)", id="estado")
         yield Input(placeholder="Servicios extras", id="servicios")
         yield Input(placeholder="Costo total", id="cuenta")
-        yield Button("Crear Reserva", id="btn_crear_reserva")
-        yield Button("Volver", id="btn_volver_reserva")
+        yield Button("Crear Reserva", id="btn_crear_reserva", style="bold white on green")
+        yield Button("Volver", id="btn_volver_reserva", style="bold white on red")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_volver_reserva":
@@ -141,9 +116,10 @@ class PantallaConsultar(Screen):
         self.reserva_mgr = reserva_mgr
 
     def compose(self) -> ComposeResult:
+        yield Static(Panel("Consultar Reserva", style="bold white on dark_orange"))
         yield Input(placeholder="ID Reserva", id="id_reserva")
-        yield Button("Consultar", id="btn_consultar")
-        yield Button("Volver", id="btn_volver_consultar")
+        yield Button("Consultar", id="btn_consultar", style="bold white on green")
+        yield Button("Volver", id="btn_volver_consultar", style="bold white on red")
         yield Static("", id="resultado_consulta")
 
     def on_button_pressed(self, event):
@@ -161,9 +137,10 @@ class PantallaDisponibilidad(Screen):
         self.habitacion_mgr = habitacion_mgr
 
     def compose(self) -> ComposeResult:
+        yield Static(Panel("Consultar Disponibilidad", style="bold white on dark_magenta"))
         yield Input(placeholder="Número de habitación", id="num_habit")
-        yield Button("Consultar", id="btn_consultar_disp")
-        yield Button("Volver", id="btn_volver_disp")
+        yield Button("Consultar", id="btn_consultar_disp", style="bold white on green")
+        yield Button("Volver", id="btn_volver_disp", style="bold white on red")
         yield Static("", id="resultado_disp")
 
     def on_button_pressed(self, event):
@@ -173,6 +150,57 @@ class PantallaDisponibilidad(Screen):
             num_habit = int(self.query_one("#num_habit", Input).value)
             resultado = self.habitacion_mgr.Disponibilidad_habitaciones(num_habit)
             self.query_one("#resultado_disp", Static).update(str(resultado))
+
+# ------------------ Pantalla Menú Principal ------------------
+class MenuPrincipalScreen(Screen):
+    def __init__(self, cliente_mgr, habitacion_mgr, reserva_mgr):
+        super().__init__()
+        self.cliente_mgr = cliente_mgr
+        self.habitacion_mgr = habitacion_mgr
+        self.reserva_mgr = reserva_mgr
+
+    def compose(self) -> ComposeResult:
+        yield Vertical(
+            Button("Registrar cliente", id="menu_cliente", style="bold white on dark_green"),
+            Button("Crear reserva", id="menu_reserva", style="bold white on dark_cyan"),
+            Button("Consultar reservas", id="menu_consultar", style="bold white on dark_orange"),
+            Button("Mostrar disponibilidad", id="menu_disponibilidad", style="bold white on dark_magenta"),
+            Button("Generar reporte PDF clientes", id="menu_pdf", style="bold white on purple"),
+            Button("Salir", id="menu_salir", style="bold white on red"),
+        )
+
+    def on_button_pressed(self, event):
+        if event.button.id == "menu_cliente":
+            self.app.push_screen(PantallaCliente(self.app.cliente_mgr))
+        elif event.button.id == "menu_reserva":
+            self.app.push_screen(PantallaReserva(self.app.reserva_mgr,
+                                                 self.app.cliente_mgr,
+                                                 self.app.habitacion_mgr))
+        elif event.button.id == "menu_consultar":
+            self.app.push_screen(PantallaConsultar(self.app.reserva_mgr))
+        elif event.button.id == "menu_disponibilidad":
+            self.app.push_screen(PantallaDisponibilidad(self.app.habitacion_mgr))
+        elif event.button.id == "menu_pdf":
+            self.generar_pdf()
+        elif event.button.id == "menu_salir":
+            self.app.exit()
+
+    def generar_pdf(self):
+        cursor = self.app.cliente_mgr.cursor
+        cursor.execute("SELECT * FROM Cliente")
+        clientes = cursor.fetchall()
+
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", "B", 16)
+        pdf.cell(0, 10, "Reporte de Clientes", ln=True, align="C")
+        pdf.ln(10)
+        pdf.set_font("Arial", "", 12)
+        for c in clientes:
+            idC, nombre, apellido, telefono, correo = c
+            pdf.cell(0, 10, f"{idC}: {nombre} {apellido}, Tel: {telefono}, Correo: {correo}", ln=True)
+        pdf.output("reporte_clientes.pdf")
+        self.app.push_screen(MensajePantalla("PDF generado: reporte_clientes.pdf"))
 
 # ------------------ App principal ------------------
 class HotelDashboard(App):
@@ -201,7 +229,7 @@ class HotelDashboard(App):
                     Static(self.cabecera_panel),
                 ),
                 Vertical(
-                    Button("Ir a registro", id="btn_ir_registro")
+                    Button("Ir a registro", id="btn_ir_registro", style="bold white on green"),
                 ),
             )
         )

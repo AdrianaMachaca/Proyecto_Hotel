@@ -63,11 +63,14 @@ def menu():
 
             case 5:
                 numHabit = int(input("Número de habitación a consultar: "))
-                habitacion_mgr.Disponibilidad_habitaciones(numHabit)
+                mensaje = habitacion_mgr.Disponibilidad_habitaciones(numHabit)
+                print(mensaje)
             case 6:
                 print("Saliendo del sistema.")
                 break
-
+            case 7:
+                print("Lista de clientes:")
+                cliente_mgr.listar_Clientes()
             case _:
                 print("Opción inválida.")
 

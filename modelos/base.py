@@ -1,14 +1,14 @@
 import sqlite3
 import os
 
-def conectar_db(ruta="Base_Datos.db"):
+def conectar_db():
+    # ruta fija en la raíz del proyecto
+    ruta = os.path.join(os.path.dirname(__file__), "..", "Base_Datos.db")
+    ruta_abs = os.path.abspath(ruta)
+    print("Usando base de datos en:", ruta_abs)
+    
     try:
-        # Ruta absoluta
-        ruta_abs = os.path.abspath(ruta)
         conexion = sqlite3.connect(ruta_abs)
-        print("Conectado a la base de datos en:", ruta_abs)
-
-        # Crear tablas si no existen
         cursor = conexion.cursor()
 
         cursor.execute("""
@@ -49,8 +49,6 @@ def conectar_db(ruta="Base_Datos.db"):
         """)
 
         conexion.commit()
-
-        # Opcional: listar tablas existentes
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         tablas = cursor.fetchall()
         print("Tablas existentes:", tablas)

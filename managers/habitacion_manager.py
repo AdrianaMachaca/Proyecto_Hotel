@@ -8,16 +8,13 @@ class Habitacion_manager:
         self.cursor = self.conn.cursor()
 
     def Disponibilidad_habitaciones(self, numHabitacion):
-        self.cursor.execute("""
-            SELECT * FROM Reserva
-            WHERE numHabit = ?
-        """,(numHabitacion,))
-        disponible = self.cursor.fetchone()
-        if disponible:
-            print("Habitacion no esta disponible")
+        self.cursor.execute("SELECT * FROM Reserva WHERE numHabit = ?", (numHabitacion,))
+        reserva = self.cursor.fetchone()
+        if reserva:
+            return f"Habitación {numHabitacion} NO está disponible"
         else:
-            print("Habitacion esta disponible")
-    
+            return f"Habitación {numHabitacion} está disponible"
+
     def crear_habitacion(self,numHabitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones):
         self.cursor.execute("""SELECT * FROM Habitacion WHERE numHabitacion = ?""",(numHabitacion,))
         habita = self.cursor.fetchone()
