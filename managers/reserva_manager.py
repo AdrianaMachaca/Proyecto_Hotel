@@ -46,11 +46,22 @@ class Reserva_manager:
             SELECT * FROM Reserva
             WHERE idReserva = ?
         """,(idReserva,))
-        disponible = self.cursor.fetchone()
-        if disponible:
-            print("Habitacion no esta disponible")
+        reserva = self.cursor.fetchone()
+
+        if reserva:
+            return f"""
+            ID Reserva: {reserva[0]}
+            Numero Habitacion: {reserva[1]}
+            ID Cliente: {reserva[2]}
+            Fecha Entrada: {reserva[3]}
+            Fecha Salida: {reserva[4]}
+            Estado: {reserva[5]}
+            Servicios: {reserva[6]}
+            Costo: {reserva[7]}
+            """
         else:
-            print("Habitacion esta disponible")
+            return f"No existe una reserva con ID {idReserva}"
+
 
     def eliminar_reserva(self, idReserva):
         self.cursor.execute("""

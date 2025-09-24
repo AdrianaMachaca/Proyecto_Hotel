@@ -55,7 +55,8 @@ def menu():
 
             case 3:
                 idReserva = int(input("ID de la reserva a consultar: "))
-                reserva_mgr.consultar_reservas(idReserva)
+                mensaje = reserva_mgr.consultar_reservas(idReserva)
+                print(mensaje)
 
             case 4:
                 idReserva = int(input("ID de la reserva a eliminar: "))
