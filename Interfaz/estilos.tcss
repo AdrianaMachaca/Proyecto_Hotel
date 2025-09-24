@@ -1,0 +1,21 @@
+#left {
+    width: 25%;
+    background: blue;
+    color: white;
+}
+#center {
+    width: 50%;
+    background: gray;
+}
+#right {
+    width: 25%;
+    background: purple;
+}
+
+#stats{
+    background: blue;
+    color: white;
+    padding: 1;
+    width: auto;
+    height: auto;
+}
