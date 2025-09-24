@@ -17,20 +17,19 @@ class PantallaRegistro(Screen):
     def compose(self) -> ComposeResult:
         yield Horizontal(
             Vertical(
-                Static(Panel("Usuario", title="Nombre de usuario", style="bold white on dark_green")),
+                Static(Panel("Usuario", title="Nombre de usuario")),
                 Input(placeholder="Ingresa tu usuario", id="usuario"),
             ),
             Vertical(
-                Static(Panel("Contraseña", title="Contraseña", style="bold white on dark_red")),
+                Static(Panel("Contraseña", title="Contraseña")),
                 Input(placeholder="Ingresa tu contraseña", password=True, id="contrasena"),
             ),
         )
-        yield Button("Registrarse", id="btn_registrarse", style="bold white on blue")
+        yield Button("Registrarse", id="btn_registrarse")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_registrarse":
             usuario = self.query_one("#usuario", Input).value
-            contrasena = self.query_one("#contrasena", Input).value
             self.app.push_screen(MensajePantalla(f"Usuario {usuario} registrado correctamente"))
 
 # ------------------ Pantalla Mensaje ------------------
@@ -40,8 +39,8 @@ class MensajePantalla(Screen):
         self.mensaje = mensaje
 
     def compose(self) -> ComposeResult:
-        yield Static(Panel(self.mensaje, style="bold white on dark_blue"))
-        yield Button("Ir al menú principal", id="btn_menu", style="bold white on green")
+        yield Static(Panel(self.mensaje))
+        yield Button("Ir al menú principal", id="btn_menu")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_menu":
@@ -49,20 +48,20 @@ class MensajePantalla(Screen):
                                                      self.app.habitacion_mgr,
                                                      self.app.reserva_mgr))
 
-# ------------------ Pantalla Registrar Cliente ------------------
+# ------------------ Pantalla Cliente ------------------
 class PantallaCliente(Screen):
     def __init__(self, cliente_mgr):
         super().__init__()
         self.cliente_mgr = cliente_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static(Panel("Registrar Cliente", style="bold white on dark_green"))
+        yield Static(Panel("Registrar Cliente"))
         yield Input(placeholder="Nombre", id="nombre")
         yield Input(placeholder="Apellido", id="apellido")
         yield Input(placeholder="Teléfono", id="telefono")
         yield Input(placeholder="Correo", id="correo")
-        yield Button("Registrar", id="btn_registrar", style="bold white on green")
-        yield Button("Volver", id="btn_volver_cliente", style="bold white on red")
+        yield Button("Registrar", id="btn_registrar")
+        yield Button("Volver", id="btn_volver_cliente")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_volver_cliente":
@@ -84,7 +83,7 @@ class PantallaReserva(Screen):
         self.habitacion_mgr = habitacion_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static(Panel("Crear Reserva", style="bold white on dark_cyan"))
+        yield Static(Panel("Crear Reserva"))
         yield Input(placeholder="ID Cliente", id="id_cliente")
         yield Input(placeholder="Número Habitación", id="num_habit")
         yield Input(placeholder="Fecha Entrada (YYYY-MM-DD)", id="fecha_entrada")
@@ -92,8 +91,8 @@ class PantallaReserva(Screen):
         yield Input(placeholder="Estado (Confirmada/Pendiente/Cancelada)", id="estado")
         yield Input(placeholder="Servicios extras", id="servicios")
         yield Input(placeholder="Costo total", id="cuenta")
-        yield Button("Crear Reserva", id="btn_crear_reserva", style="bold white on green")
-        yield Button("Volver", id="btn_volver_reserva", style="bold white on red")
+        yield Button("Crear Reserva", id="btn_crear_reserva")
+        yield Button("Volver", id="btn_volver_reserva")
 
     def on_button_pressed(self, event):
         if event.button.id == "btn_volver_reserva":
@@ -116,10 +115,10 @@ class PantallaConsultar(Screen):
         self.reserva_mgr = reserva_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static(Panel("Consultar Reserva", style="bold white on dark_orange"))
+        yield Static(Panel("Consultar Reserva"))
         yield Input(placeholder="ID Reserva", id="id_reserva")
-        yield Button("Consultar", id="btn_consultar", style="bold white on green")
-        yield Button("Volver", id="btn_volver_consultar", style="bold white on red")
+        yield Button("Consultar", id="btn_consultar")
+        yield Button("Volver", id="btn_volver_consultar")
         yield Static("", id="resultado_consulta")
 
     def on_button_pressed(self, event):
@@ -130,17 +129,17 @@ class PantallaConsultar(Screen):
             resultado = self.reserva_mgr.consultar_reservas(id_reserva)
             self.query_one("#resultado_consulta", Static).update(str(resultado))
 
-# ------------------ Pantalla Mostrar Disponibilidad ------------------
+# ------------------ Pantalla Disponibilidad ------------------
 class PantallaDisponibilidad(Screen):
     def __init__(self, habitacion_mgr):
         super().__init__()
         self.habitacion_mgr = habitacion_mgr
 
     def compose(self) -> ComposeResult:
-        yield Static(Panel("Consultar Disponibilidad", style="bold white on dark_magenta"))
+        yield Static(Panel("Consultar Disponibilidad"))
         yield Input(placeholder="Número de habitación", id="num_habit")
-        yield Button("Consultar", id="btn_consultar_disp", style="bold white on green")
-        yield Button("Volver", id="btn_volver_disp", style="bold white on red")
+        yield Button("Consultar", id="btn_consultar_disp")
+        yield Button("Volver", id="btn_volver_disp")
         yield Static("", id="resultado_disp")
 
     def on_button_pressed(self, event):
@@ -161,12 +160,12 @@ class MenuPrincipalScreen(Screen):
 
     def compose(self) -> ComposeResult:
         yield Vertical(
-            Button("Registrar cliente", id="menu_cliente", style="bold white on dark_green"),
-            Button("Crear reserva", id="menu_reserva", style="bold white on dark_cyan"),
-            Button("Consultar reservas", id="menu_consultar", style="bold white on dark_orange"),
-            Button("Mostrar disponibilidad", id="menu_disponibilidad", style="bold white on dark_magenta"),
-            Button("Generar reporte PDF clientes", id="menu_pdf", style="bold white on purple"),
-            Button("Salir", id="menu_salir", style="bold white on red"),
+            Button("Registrar cliente", id="menu_cliente"),
+            Button("Crear reserva", id="menu_reserva"),
+            Button("Consultar reservas", id="menu_consultar"),
+            Button("Mostrar disponibilidad", id="menu_disponibilidad"),
+            Button("Generar reporte PDF clientes", id="menu_pdf"),
+            Button("Salir", id="menu_salir"),
         )
 
     def on_button_pressed(self, event):
@@ -204,7 +203,7 @@ class MenuPrincipalScreen(Screen):
 
 # ------------------ App principal ------------------
 class HotelDashboard(App):
-    CSS_PATH = None
+    CSS_PATH = "estilos.tcss"
 
     def __init__(self):
         super().__init__()
@@ -219,7 +218,7 @@ class HotelDashboard(App):
         combined_text = Text(justify="center")
         combined_text.append("🏜️ 🏨 🌅 WELCOME TO THE DUNE PALACE 🌅 🏨 🏜️\n", style="bold yellow")
         combined_text.append(self.ascii_art, style="bold #DCC7AA")
-        self.cabecera_panel = Panel(combined_text, title="Hotel", style="white on blue")
+        self.cabecera_panel = Panel(combined_text, title="Hotel")
 
     def compose(self) -> ComposeResult:
         yield Header(show_clock=True)
@@ -229,7 +228,7 @@ class HotelDashboard(App):
                     Static(self.cabecera_panel),
                 ),
                 Vertical(
-                    Button("Ir a registro", id="btn_ir_registro", style="bold white on green"),
+                    Button("Ir a registro", id="btn_ir_registro"),
                 ),
             )
         )

@@ -1,21 +1,35 @@
-#left {
-    width: 25%;
-    background: blue;
+/* hotel.css */
+
+#btn_ir_registro {
+    background: green;
     color: white;
-}
-#center {
-    width: 50%;
-    background: gray;
-}
-#right {
-    width: 25%;
-    background: purple;
+    border: round yellow;
 }
 
-#stats{
+#btn_registrarse {
     background: blue;
     color: white;
-    padding: 1;
-    width: auto;
-    height: auto;
 }
+
+#btn_registrar, #btn_crear_reserva, #btn_consultar, #btn_consultar_disp {
+    background: green;
+    color: white;
+}
+
+#btn_volver_cliente, #btn_volver_reserva, #btn_volver_consultar, #btn_volver_disp {
+    background: red;
+    color: white;
+}
+
+Static {
+    border: round cyan;
+    padding: 1 2;
+}
+
+/* Puedes agregar más IDs de botones según el menú */
+#menu_cliente { background: dark_green; color: white; }
+#menu_reserva { background: dark_cyan; color: white; }
+#menu_consultar { background: dark_orange; color: white; }
+#menu_disponibilidad { background: dark_magenta; color: white; }
+#menu_pdf { background: purple; color: white; }
+#menu_salir { background: red; color: white; }
