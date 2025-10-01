@@ -1,18 +1,5 @@
-<<<<<<< HEAD
-linkify-it-py==2.0.3
-markdown-it-py==4.0.0
-mdit-py-plugins==0.5.0
-mdurl==0.1.2
-platformdirs==4.4.0
-Pygments==2.19.2
-rich==14.1.0
-textual==6.2.0
-typing_extensions==4.15.0
-uc-micro-py==1.0.3
-=======
 # Librerías principales para la aplicación
 textual==0.23.0                # Interfaz de usuario basada en consola
 pyfiglet==0.8.post1             # Generación de arte ASCII
 fpdf==1.7.2                    # Generación de PDFs
-rich==12.5.1                   # Formateo de texto y paneles
->>>>>>> 8a5001a2c900e28d02b71f2b9597f5f62e8146e0
+rich==13.3.3                   # Formateo de texto y paneles
