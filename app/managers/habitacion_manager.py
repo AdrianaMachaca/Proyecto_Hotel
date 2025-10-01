@@ -1,6 +1,7 @@
 import sqlite3
-from modelos.base import conectar_db
-from modelos.habitacion import Habitacion
+from app.modelos.base import conectar_db
+from app.modelos.habitacion import Habitacion
+
 class Habitacion_manager:
     def __init__(self, conn):
         self.conn = conn

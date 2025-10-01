@@ -20,7 +20,7 @@ class PantallaDisponibilidad(Screen):
         # Área para mostrar el resultado de la consulta de disponibilidad
         yield Static("", id="resultado_disp")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_volver_disp":
             self.app.pop_screen()  # Volver al menú anterior
         elif event.button.id == "btn_consultar_disp":

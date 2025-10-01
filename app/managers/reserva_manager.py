@@ -1,6 +1,6 @@
 import sqlite3
-from modelos.base import conectar_db
-from modelos.reserva import Reserva
+from app.modelos.base import conectar_db
+from app.modelos.reserva import Reserva
 
 class Reserva_manager:
     def __init__(self, conn):

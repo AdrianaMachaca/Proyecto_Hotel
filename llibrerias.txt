@@ -1,5 +1,0 @@
-# Librerías principales para la aplicación
-textual==0.23.0                # Interfaz de usuario basada en consola
-pyfiglet==0.8.post1             # Generación de arte ASCII
-fpdf==1.7.2                    # Generación de PDFs
-rich==12.5.1                   # Formateo de texto y paneles

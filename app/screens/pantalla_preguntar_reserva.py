@@ -1,7 +1,7 @@
 from textual.screen import Screen
 from textual.widgets import Static, Button
 from textual import events
-from pantalla_reserva import PantallaReserva
+from app.screens.pantalla_reserva import PantallaReserva
 
 class PreguntarReserva(Screen):
     def __init__(self, id_cliente, reserva_mgr, habitacion_mgr):
@@ -18,7 +18,7 @@ class PreguntarReserva(Screen):
         yield Button("Sí", id="btn_si")
         yield Button("No", id="btn_no")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_si":
             # Si elige sí, ir a la pantalla de crear reserva
             self.app.push_screen(PantallaReserva(self.reserva_mgr, self.id_cliente, self.habitacion_mgr))

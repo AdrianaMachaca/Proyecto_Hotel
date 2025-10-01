@@ -1,8 +1,8 @@
 from textual.app import App, ComposeResult
 from textual.widgets import Button, Static
 from textual.screen import Screen
-from utilidades.generador_pdf import generar_pdf_clientes  # Importa la función para generar PDF
-from pantalla_mensaje import MensajePantalla
+from app.utilidades.generador_pdf import generar_pdf_clientes  # Importa la función para generar PDF
+from app.screens.pantalla_mensaje import MensajePantalla
 
 class MenuPrincipalScreen(Screen):
     def __init__(self, cliente_mgr, habitacion_mgr, reserva_mgr):

@@ -1,9 +1,10 @@
 import sqlite3
-from modelos.base import conectar_db
-from modelos.cliente import Clientes
+from app.modelos.base import conectar_db
+from app.modelos.cliente import Clientes
 
 class Cliente_manager:
     def __init__(self, conn):
+        pass
         self.conn = conn
         self.cursor = self.conn.cursor()
 
