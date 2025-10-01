@@ -7,8 +7,15 @@ class PantallaConsultar(Screen):
         super().__init__()
         self.reserva_mgr = reserva_mgr
 
-    def compose(self):
-        yield Static("Consultar Reserva")
+    def compose(self) :
+        boton = Button("Texto visible", id="btn_prueba")
+        boton.styles.background = "black"
+        boton.styles.color = "white"
+        yield boton
+
+    #def compose(self):
+
+     #   yield Static("Consultar Reserva")
         
         # Campo de entrada para ingresar el ID de la reserva
         yield Input(placeholder="ID Reserva", id="id_reserva")

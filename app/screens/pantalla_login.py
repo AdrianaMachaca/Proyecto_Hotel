@@ -21,6 +21,6 @@ class PantallaLogin(Screen):
             contrasena = self.query_one("#contrasena", Input).value
 
             if usuario == "admin" and contrasena == "1234":
-                self.app.push_screen(self.app.menu_principal)
+                self.app.on_login_success(id_cliente=1)
             else:
                 self.app.push_screen(self.app.mensaje_error("Usuario o contraseña incorrectos"))

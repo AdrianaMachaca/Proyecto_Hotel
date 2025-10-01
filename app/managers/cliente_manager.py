@@ -34,8 +34,6 @@ class Cliente_manager:
             print(f"Error al registrar cliente: {e}")
             return None
 
-
-    
     def listar_Clientes(self):
         try:
             self.cursor.execute("SELECT * FROM Cliente")
@@ -44,7 +42,7 @@ class Cliente_manager:
         except sqlite3.Error as e:
             print(f"Error al listar clientes: {e}")
             return []
-        
+
     def mostrar_tabla_clientes(self, clientes):
         if clientes:
             data = [[c.idCliente, c.Nombre, c.Apellido, c.Telefono, c.Correo] for c in clientes]
@@ -64,4 +62,4 @@ class Cliente_manager:
                 return None
         except sqlite3.Error as e:
             print(f"Error al buscar cliente: {e}")
-            return None 
+            return None

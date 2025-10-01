@@ -1,119 +1,48 @@
-/* Definir los estilos de los botones */
-Button {
-    background: #4CAF50;
-    color: black;
-    border: round yellow;
-    padding: 1 2;
-    margin: 0 1;
+Button#menu_cliente {
+    border: round #2E8B57;  /* Borde verde oscuro */
     height: 3;
     width: 20;
-}
-
-/* Estilos para botones con texto rojo */
-Button#btn_volver_cliente {
-    background: red;
-    color: white;
-    border: round yellow;
-}
-
-Button#btn_volver_reserva {
-    background: red;
-    color: white;
-    border: round yellow;
-}
-
-Button#btn_volver_consultar {
-    background: red;
-    color: white;
-    border: round yellow;
-}
-
-Button#btn_volver_disp {
-    background: red;
-    color: white;
-    border: round yellow;
-}
-
-/* Estilo de los botones del menú principal */
-Button#menu_cliente {
-    background: green;
-    color: black;
+    background: transparent;
 }
 
 Button#menu_reserva {
-    background: cyan;
-    color: black;
+    border: round #00CED1;  /* Borde turquesa */
+    height: 3;
+    width: 20;
+    background: transparent;
 }
 
 Button#menu_consultar {
-    background: orange;
-    color: black;
+    border: round #FFA500;  /* Borde naranja */
+    height: 3;
+    width: 20;
+    background: transparent;
 }
 
 Button#menu_eliminar {
-    background: red;
-    color: white;
+    border: round #DC143C;  /* Borde carmesí */
+    height: 3;
+    width: 20;
+    background: transparent;
 }
 
 Button#menu_disponibilidad {
-    background: magenta;
-    color: white;
+    border: round #8A2BE2;  /* Borde azul violeta */
+    height: 3;
+    width: 20;
+    background: transparent;
 }
 
 Button#menu_pdf {
-    background: purple;
-    color: white;
+    border: round #6A5ACD;  /* Borde azul medio */
+    height: 3;
+    width: 20;
+    background: transparent;
 }
 
 Button#menu_salir {
-    background: darkred;
-    color: white;
-}
-
-/* Estilos del encabezado */
-Static#cabecera_panel {
-    background: #212121;
-    color: white;
-    border: solid white;
-    padding: 1 2;
-}
-
-/* Estilos de los paneles estáticos */
-Static {
-    background: #212121;
-    color: white;
-    border: round cyan;
-    padding: 1 2;
-}
-
-/* Estilos para las entradas de texto (Input) */
-Input {
-    background: #333333;
-    color: white;
-    border: round green;
-    padding: 0 1;
-    width: 30;
-}
-
-/* Estilos de los títulos (Static) */
-Static#resultado_consulta {
-    background: #444444;
-    color: lightgreen;
-    padding: 1 2;
-    border: round yellow;
-}
-
-Static#resultado_disp {
-    background: #444444;
-    color: lightgreen;
-    padding: 1 2;
-    border: round yellow;
-}
-
-/* Estilos del mensaje (cuando hay error o éxito) */
-Static#mensaje_error {
-    background: red;
-    color: white;
-    padding: 1 2;
-    border: round yellow;
-}
+    border: round #8B0000;  /* Borde rojo oscuro */
+    height: 3;
+    width: 20;
+    background: transparent;
+}  

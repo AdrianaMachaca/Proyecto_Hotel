@@ -1,15 +1,14 @@
 class Reserva:
-    def __init__(self, idReserva, numHabit, idCliente, fechaEntrada, fechaSalida, estadoReserva, serviciosExtras, costo, cuenta=None):
+    def __init__(self, cliente, idReserva, numHabit, idCliente, fechaEntrada, fechaSalida, estadoReserva, servExtras, cuenta):
+        self.cliente = cliente
         self.idReserva = idReserva
         self.numHabit = numHabit
         self.idCliente = idCliente
         self.fechaEntrada = fechaEntrada
         self.fechaSalida = fechaSalida
         self.estadoReserva = estadoReserva
-        self.serviciosExtras = serviciosExtras
-        self.costo = costo
-        self.cuenta = cuenta
-
+        self.servExtras = servExtras
+        self.cuenta =  cuenta
 
     def mostrar_reserva(self):
         print(f"Reserva ID: {self.idReserva}")
