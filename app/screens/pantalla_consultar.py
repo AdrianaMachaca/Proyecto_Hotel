@@ -20,7 +20,7 @@ class PantallaConsultar(Screen):
         # Área para mostrar el resultado de la consulta
         yield Static("", id="resultado_consulta")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_volver_consultar":
             self.app.pop_screen()  # Volver al menú anterior
         elif event.button.id == "btn_consultar":

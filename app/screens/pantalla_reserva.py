@@ -24,7 +24,7 @@ class PantallaReserva(Screen):
         yield Button("Crear Reserva", id="btn_crear_reserva")
         yield Button("Volver", id="btn_volver_reserva")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_volver_reserva":
             self.app.pop_screen()  # Regresar a la pantalla anterior
         elif event.button.id == "btn_crear_reserva":

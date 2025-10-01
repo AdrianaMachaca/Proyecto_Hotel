@@ -1,7 +1,7 @@
 from textual.screen import Screen
 from textual.widgets import Static, Input, Button
 from textual import events
-from pantalla_preguntar_reserva import PreguntarReserva 
+from app.screens.pantalla_preguntar_reserva import PreguntarReserva
 
 class PantallaCliente(Screen):
     def __init__(self, cliente_mgr, reserva_mgr, habitacion_mgr):
@@ -24,7 +24,7 @@ class PantallaCliente(Screen):
         yield Button("Registrar", id="btn_registrar")
         yield Button("Volver", id="btn_volver_cliente")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_volver_cliente":
             self.app.pop_screen()  # Volver al menú anterior
         elif event.button.id == "btn_registrar":

@@ -17,7 +17,7 @@ class PantallaEliminarReserva(Screen):
         yield Button("Eliminar", id="btn_eliminar")
         yield Button("Volver", id="btn_volver_eliminar")
 
-    async def on_button_pressed(self, event: events.ButtonPressed):
+    async def on_button_pressed(self, event):
         if event.button.id == "btn_volver_eliminar":
             self.app.pop_screen()  # Volver a la pantalla anterior
         elif event.button.id == "btn_eliminar":

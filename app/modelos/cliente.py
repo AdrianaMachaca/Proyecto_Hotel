@@ -1,5 +1,5 @@
 import sqlite3
-from base import conectar_db
+from app.modelos.base import conectar_db
 
 class Clientes:
     def __init__(self, idCliente, Nombre, Apellido, Telefono, Correo):
