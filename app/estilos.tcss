@@ -1,51 +1,85 @@
-/* Definir el fondo y el estilo de los paneles */
-panel {
-    background: #212121;
-    color: white;
-    border: round cyan;
-    padding: 1 2;
-    margin: 0 2;
-}
-
 /* Definir los estilos de los botones */
-button {
-    background: #4CAF50; /* Verde */
+Button {
+    background: #4CAF50;
     color: black;
     border: round yellow;
     padding: 1 2;
     margin: 0 1;
-    height: 3; /* Altura del botón */
-    width: 20; /* Ancho del botón */
+    height: 3;
+    width: 20;
 }
 
 /* Estilos para botones con texto rojo */
-button#btn_volver_cliente, button#btn_volver_reserva, button#btn_volver_consultar, button#btn_volver_disp {
+Button#btn_volver_cliente {
+    background: red;
+    color: white;
+    border: round yellow;
+}
+
+Button#btn_volver_reserva {
+    background: red;
+    color: white;
+    border: round yellow;
+}
+
+Button#btn_volver_consultar {
+    background: red;
+    color: white;
+    border: round yellow;
+}
+
+Button#btn_volver_disp {
     background: red;
     color: white;
     border: round yellow;
 }
 
 /* Estilo de los botones del menú principal */
-#menu_cliente { background: green; color: black; }
-#menu_reserva { background: cyan; color: black; }
-#menu_consultar { background: orange; color: black; }
-#menu_eliminar { background: red; color: white; }
-#menu_disponibilidad { background: magenta; color: white; }
-#menu_pdf { background: purple; color: white; }
-#menu_salir { background: darkred; color: white; }
+Button#menu_cliente {
+    background: green;
+    color: black;
+}
+
+Button#menu_reserva {
+    background: cyan;
+    color: black;
+}
+
+Button#menu_consultar {
+    background: orange;
+    color: black;
+}
+
+Button#menu_eliminar {
+    background: red;
+    color: white;
+}
+
+Button#menu_disponibilidad {
+    background: magenta;
+    color: white;
+}
+
+Button#menu_pdf {
+    background: purple;
+    color: white;
+}
+
+Button#menu_salir {
+    background: darkred;
+    color: white;
+}
 
 /* Estilos del encabezado */
-static#cabecera_panel {
-    background: #1F1F1F;
-    color: yellow;
-    padding: 2 4;
-    border: round blue;
-    height: 8; /* Ajusta la altura del encabezado */
-    width: 60;
+Static#cabecera_panel {
+    background: #212121;
+    color: white;
+    border: solid white;
+    padding: 1 2;
 }
 
 /* Estilos de los paneles estáticos */
-static {
+Static {
     background: #212121;
     color: white;
     border: round cyan;
@@ -53,7 +87,7 @@ static {
 }
 
 /* Estilos para las entradas de texto (Input) */
-input {
+Input {
     background: #333333;
     color: white;
     border: round green;
@@ -62,7 +96,14 @@ input {
 }
 
 /* Estilos de los títulos (Static) */
-static#resultado_consulta, static#resultado_disp {
+Static#resultado_consulta {
+    background: #444444;
+    color: lightgreen;
+    padding: 1 2;
+    border: round yellow;
+}
+
+Static#resultado_disp {
     background: #444444;
     color: lightgreen;
     padding: 1 2;
@@ -70,7 +111,7 @@ static#resultado_consulta, static#resultado_disp {
 }
 
 /* Estilos del mensaje (cuando hay error o éxito) */
-static#mensaje_error {
+Static#mensaje_error {
     background: red;
     color: white;
     padding: 1 2;

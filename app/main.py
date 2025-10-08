@@ -1,9 +1,14 @@
-from app import cliente_mgr, reserva_mgr, habitacion_mgr  # Importamos gestores inicializados
-from app.screens import PantallaLogin, MenuPrincipalScreen
+from app.managers.cliente_manager import Cliente_manager
+from app.managers.habitacion_manager import Habitacion_manager
+from app.managers.reserva_manager import Reserva_manager
+
+from app.screens.pantalla_login import PantallaLogin
+from app.screens.pantalla_menu import MenuPrincipalScreen
 from textual.app import App
 from rich.text import Text
 from rich.panel import Panel
 from pyfiglet import Figlet
+from textual.widgets import Static, Button
 from app.modelos.base import conectar_db
 
 
@@ -12,19 +17,24 @@ class HotelDashboard(App):
 
     def __init__(self):
         super().__init__()
-        
-        # Configuración del encabezado con un arte ASCII
+
+        # Conexión a la base de datos
+        conn = conectar_db()
+        self.cliente_mgr = Cliente_manager(conn)
+        self.habitacion_mgr = Habitacion_manager(conn)
+        self.reserva_mgr = Reserva_manager(conn)
+
+        # Configuración del encabezado con arte ASCII
         f = Figlet(font='slant')
         ascii_art = f.renderText("THE DUNE PALACE")
         combined_text = Text(justify="center")
         combined_text.append("🏜️ 🏨 🌅 WELCOME TO THE DUNE PALACE 🌅 🏨 🏜️\n", style="bold yellow")
         combined_text.append(ascii_art, style="bold #DCC7AA")
-        
-        # Inicialización de la pantalla de login
-        self.cabecera_panel = Panel(combined_text, title="Hotel", padding=(1, 2))
-        
-        # Inicialización de la pantalla del menú principal
-        self.menu_principal = MenuPrincipalScreen(cliente_mgr, habitacion_mgr, reserva_mgr)
+        self.cabecera_panel = Static(combined_text, id="cabecera_panel")
+
+        # Pantalla principal
+        self.menu_principal = MenuPrincipalScreen(self.cliente_mgr, self.habitacion_mgr, self.reserva_mgr)
+
 
     def on_mount(self):
         # Cuando la app se monte, mostramos la pantalla de login primero
