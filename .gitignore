@@ -1,5 +1,38 @@
+# Archivos de Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# Entornos virtuales
 .env/
 .venv/
+venv/
+ENV/
+env.bak/
+*.env
+
+# Archivos de base de datos
+*.db
 base_datos/*.db
+
+# Archivos PDF generados automáticamente
+*.pdf
+
+# Archivos CSV generados o temporales
+*.csv
+
+# Archivos de logs y temporales
+*.log
+*.tmp
+*.bak
+
+# Archivos de configuración de VS Code
+.vscode/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db

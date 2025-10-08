@@ -1,12 +1,38 @@
 import sqlite3
+from tabulate import tabulate
 from app.modelos.base import conectar_db
 from app.modelos.habitacion import Habitacion
-from tabulate import tabulate
 
 class Habitacion_manager:
     def __init__(self, conn):
         self.conn = conn
         self.cursor = self.conn.cursor()
+
+    def disponibilidad_habitaciones(self, numHabitacion):
+        try:
+            # 1️⃣ Verificar que la habitacion exista
+            self.cursor.execute("SELECT * FROM Habitacion WHERE Num_Habitacion = ?", (numHabitacion,))
+            habitacion = self.cursor.fetchone()
+            if not habitacion:
+                return f"❌ La habitación {numHabitacion} no existe."
+
+            # 2️⃣ Verificar si hay reservas activas
+            self.cursor.execute("""
+                SELECT * FROM Reserva 
+                WHERE numHabit = ? AND estadoReserva != 'cancelada'
+            """, (numHabitacion,))
+            reserva = self.cursor.fetchone()
+
+            if reserva:
+                return f"Habitación {numHabitacion} NO está disponible"
+            else:
+                return f"Habitación {numHabitacion} está disponible"
+
+        except sqlite3.Error as e:
+            print(f"Error al comprobar disponibilidad: {e}")
+            return "Error al verificar disponibilidad."
+
+
 
     def crear_habitacion(self, numHabitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones):
         try:
@@ -27,16 +53,8 @@ class Habitacion_manager:
         except sqlite3.Error as e:
             print(f"Error al crear habitación: {e}")
             return None
-
-    def listar_habitaciones(self):
-            try:
-                self.cursor.execute("SELECT * FROM Habitacion")
-                return self.cursor.fetchall()
-            except sqlite3.Error as e:
-                print(f"Error al listar habitaciones: {e}")
-                return []
-            
-            # Devuelve los datos sin imprimir
+        
+    # Solo devuelve los datos
     def obtener_habitaciones(self):
         try:
             self.cursor.execute("SELECT * FROM Habitacion")
@@ -45,7 +63,7 @@ class Habitacion_manager:
             print(f"Error al obtener habitaciones: {e}")
             return []
 
-    # Imprime la tabla en consola
+    # Solo imprime la tabla
     def mostrar_habitaciones(self):
         filas = self.obtener_habitaciones()
         if filas:
@@ -53,64 +71,4 @@ class Habitacion_manager:
             print(tabulate(tabla, headers=["Num", "Tipo", "Estado", "Precio", "Capacidad", "Servicios", "Observaciones"], tablefmt="grid"))
         else:
             print("❌ No hay habitaciones registradas.")
-
-    def disponibilidad_habitaciones(self, numHabitacion):
-        try:
-            # Primero revisamos si existe la habitación
-            self.cursor.execute("SELECT * FROM Habitacion WHERE Num_Habitacion = ?", (numHabitacion,))
-            hab = self.cursor.fetchone()
-            if not hab:
-                return f"❌ La habitación {numHabitacion} no existe."
-
-            # Revisamos si está reservada
-            self.cursor.execute("SELECT * FROM Reserva WHERE numHabit = ? AND estadoReserva='confirmada'", (numHabitacion,))
-            reserva = self.cursor.fetchone()
-            if reserva:
-                return f"Habitación {numHabitacion} NO está disponible"
-            else:
-                return f"Habitación {numHabitacion} está disponible"
-        except sqlite3.Error as e:
-            return f"Error al comprobar disponibilidad: {e}"
-
-import sqlite3
-from app.modelos.base import conectar_db
-from app.modelos.habitacion import Habitacion
-
-class Habitacion_manager:
-    def __init__(self, conn):
-        self.conn = conn
-        self.cursor = self.conn.cursor()
-
-    def disponibilidad_habitaciones(self, numHabitacion):
-        try:
-            self.cursor.execute("SELECT * FROM Reserva WHERE numHabit = ?", (numHabitacion,))
-            reserva = self.cursor.fetchone()
-            if reserva:
-                return f"Habitación {numHabitacion} NO está disponible"
-            else:
-                return f"Habitación {numHabitacion} está disponible"
-        except sqlite3.Error as e:
-            print(f"Error al comprobar disponibilidad: {e}")
-            return "Error al verificar disponibilidad."
-
-    def crear_habitacion(self, numHabitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones):
-        try:
-            # Comprobamos si la habitación ya existe
-            self.cursor.execute("SELECT * FROM Habitacion WHERE numHabitacion = ?", (numHabitacion,))
-            habita = self.cursor.fetchone()
-
-            if habita:
-                print("La habitación ya existe")
-                return Habitacion(*habita)  # Retornamos el objeto ya existente
-            else:
-                self.cursor.execute("""
-                    INSERT INTO Habitacion (Num_Habitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)
-                """, (numHabitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones))
-                self.conn.commit()
-                print(f"Habitación creada con éxito")
-                return Habitacion(numHabitacion, Tipo, Estado, Precio, Capacidad, Servicios, Observaciones)
-        except sqlite3.Error as e:
-            print(f"Error al crear habitación: {e}")
-            return None
 

@@ -13,6 +13,7 @@ from app.screens.pantalla_login import PantallaLogin
 from app.screens.pantalla_cliente import PantallaCliente
 from app.screens.pantalla_consultar import PantallaConsultar
 
+
 class HotelDashboard(App):
     CSS_PATH = "estilos.tcss"  # Archivo de estilos
 

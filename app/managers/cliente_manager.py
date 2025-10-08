@@ -10,17 +10,15 @@ class Cliente_manager:
 
     def registrar_cliente(self, nombre, apellido, telefono, correo):
         try:
-            # Validación básica del correo
             while "@" not in correo:
-                print("Error: el correo electronico debe contener '@'.")
+                print("Error: el correo debe contener '@'.")
                 correo = input("Ingrese nuevamente el correo: ")
 
-            # ---- VALIDACION: correo duplicado ----
-            self.cursor.execute("SELECT idCliente FROM Cliente WHERE Correo = ?", (correo,))
+            # Validar correo duplicado (solo clientes activos)
+            self.cursor.execute("SELECT idCliente FROM Cliente WHERE Correo = ? AND activo = 1", (correo,))
             if self.cursor.fetchone():
-                print("Ya existe un cliente con este correo.")
+                print("Ya existe un cliente activo con este correo.")
                 return None
-            # --------------------------------------
 
             # Insertar nuevo cliente
             self.cursor.execute("""
@@ -36,7 +34,8 @@ class Cliente_manager:
 
     def listar_Clientes(self):
         try:
-            self.cursor.execute("SELECT * FROM Cliente")
+            # Solo clientes activos
+            self.cursor.execute("SELECT * FROM Cliente WHERE activo = 1")
             filas = self.cursor.fetchall()
             return [Clientes(*fila) for fila in filas]
         except sqlite3.Error as e:
@@ -53,13 +52,39 @@ class Cliente_manager:
 
     def buscar_Clientes(self, idCliente):
         try:
-            self.cursor.execute("""SELECT * FROM Cliente WHERE idCliente = ?""", (idCliente,))
+            self.cursor.execute("SELECT * FROM Cliente WHERE idCliente = ? AND activo = 1", (idCliente,))
             client = self.cursor.fetchone()
             if client:
                 return Clientes(*client)
             else:
-                print("Cliente no encontrado.")
+                print("Cliente no encontrado o inactivo.")
                 return None
         except sqlite3.Error as e:
             print(f"Error al buscar cliente: {e}")
             return None
+
+    def eliminar_cliente(self, idCliente):
+        try:
+            # Marcamos al cliente como inactivo
+            self.cursor.execute("UPDATE Cliente SET activo = 0 WHERE idCliente = ?", (idCliente,))
+            
+            # Cancelamos todas sus reservas activas
+            self.cursor.execute("""
+                UPDATE Reserva
+                SET estadoReserva = 'cancelada'
+                WHERE idCliente = ? AND estadoReserva != 'cancelada'
+            """, (idCliente,))
+            
+            self.conn.commit()
+            print("Cliente eliminado (lógicamente) y reservas canceladas con éxito.")
+        except sqlite3.Error as e:
+            print(f"Error al eliminar cliente: {e}")
+    def exportar_clientes_csv(self):
+        clientes = self.clientes.listar_Clientes()
+        if clientes:
+            datos = [(c.idCliente, c.Nombre, c.Apellido, c.Telefono, c.Correo) for c in clientes]
+            encabezados = ["ID", "Nombre", "Apellido", "Telefono", "Correo"]
+            self.exportar_csv(datos, encabezados, "clientes.csv")
+        else:
+            print("❌ No hay clientes para exportar")
+
