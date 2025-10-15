@@ -2,12 +2,13 @@ import sqlite3
 from app.modelos.base import conectar_db
 
 class Clientes:
-    def __init__(self, idCliente, Nombre, Apellido, Telefono, Correo):
+    def __init__(self, idCliente, Nombre, Apellido, Telefono, Correo, Activo = 1):
         self.idCliente = idCliente
         self.Nombre = Nombre
         self.Apellido = Apellido
         self.Telefono = Telefono
         self.Correo = Correo
+        self.Activo = Activo
 
     def guardar(self):
         conexion = conectar_db()  # Asume que ya tienes un método para conectar

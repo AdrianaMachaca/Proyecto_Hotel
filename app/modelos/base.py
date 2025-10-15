@@ -9,6 +9,7 @@ def conectar_db():
 
     try:
         conexion = sqlite3.connect(ruta_abs)
+        conexion.execute("PRAGMA foreign_keys = ON;")  # 🔹 Activar claves foráneas
         cursor = conexion.cursor()
 
         cursor.execute("""
@@ -17,9 +18,15 @@ def conectar_db():
             Nombre TEXT NOT NULL,
             Apellido TEXT NOT NULL,
             Telefono TEXT,
-            Correo TEXT
+            Correo TEXT,
+            activo INTEGER DEFAULT 1  -- 🔹 1 = activo, 0 = eliminado
         )
         """)
+ 
+        cursor.execute("PRAGMA table_info(Cliente)")
+        columnas = [col[1] for col in cursor.fetchall()]
+        if "activo" not in columnas:
+            cursor.execute("ALTER TABLE Cliente ADD COLUMN activo INTEGER DEFAULT 1")
 
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS Habitacion (
@@ -43,10 +50,22 @@ def conectar_db():
             estadoReserva TEXT NOT NULL,
             serviciosExtras TEXT,
             costo REAL NOT NULL,
-            FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente),
-            FOREIGN KEY (numHabit) REFERENCES Habitacion(Num_Habitacion)
+            FOREIGN KEY (idCliente) REFERENCES Cliente(idCliente) ON DELETE CASCADE,
+            FOREIGN KEY (numHabit) REFERENCES Habitacion(Num_Habitacion) ON DELETE CASCADE
         )
         """)
+        # Dentro de conectar_db(), después de crear la tabla Cliente
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS Usuario (
+            idUsuario INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password TEXT NOT NULL
+        )
+        """)
+        cursor.execute("SELECT COUNT(*) FROM Usuario WHERE username = 'admin'")
+        if cursor.fetchone()[0] == 0:
+            cursor.execute("INSERT INTO Usuario (username, password) VALUES ('admin', '1234')")
+            conexion.commit()
 
         conexion.commit()
 
@@ -58,4 +77,4 @@ def conectar_db():
 
     except sqlite3.Error as e:
         print(f"Error al conectar: {e}")
-        return None
+        return None 
